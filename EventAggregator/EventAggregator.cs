@@ -13,18 +13,23 @@ namespace EventAggregator
 
         public void Subscribe(object source)
         {
+            object[] args = { source };
             var eventTypes = source.GetType().GetInterfaces()
                 .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEventHandler<>));
 
             foreach (var eventType in eventTypes)
             {
                 var @event = eventType.GenericTypeArguments.FirstOrDefault();
-                var method = typeof(EventAggregator).GetMethod("GetEvent");
-                var generic = method.MakeGenericMethod(@event);
-                var eventObservable = generic.Invoke(this, null);
+                var method = typeof(EventAggregator).GetMethod(nameof(SubscribeEventType));
+                var generic = method?.MakeGenericMethod(@event);
+                generic?.Invoke(this, args);
             }
         }
 
-        public IObservable<TEvent> GetEvent<TEvent>() => _subject.OfType<TEvent>().AsObservable();
+        public void SubscribeEventType<TEvent>(IEventHandler<TEvent> handler)
+        {
+            _subject.OfType<TEvent>().AsObservable()
+                .Subscribe(handler.OnHandle);
+        }
     }
 }
