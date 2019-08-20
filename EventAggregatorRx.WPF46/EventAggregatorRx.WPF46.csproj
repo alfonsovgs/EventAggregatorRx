@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventAggregator.cs" />
+    <Compile Include="EventAggregatorExtension.cs" />
     <Compile Include="IEvent.cs" />
     <Compile Include="IEventAggregator.cs" />
     <Compile Include="IEventHandler.cs" />
