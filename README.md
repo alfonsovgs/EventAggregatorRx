@@ -49,3 +49,20 @@ public class CatalogViewModel
     }
 }
 ```
+
+## Method Extensions
+
+You can use method extensions to simplify
+
+
+```csharp
+public class CatalogViewModel
+{
+    ...
+    public CatalogViewModel(IEventAggregator eventAggregator)
+    {
+        eventAggregator.Publish<ItemAdded>(x => ItemId = Guid.NewGuid());
+        eventAggregator.Publish<ItemAdded>(); //If the event no has data
+    }
+}
+```
